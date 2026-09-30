@@ -1,0 +1,31 @@
+name: Infisical Demo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fetch DEMO_SECRET from Infisical
+        uses: Infisical/secrets-action@v1.0.9
+        with:
+          method: oidc
+          identity-id: 90fa4554-aa80-4c26-8b53-8a3754a2a72a
+          project-slug: mathew-cherian-superday-project-3cl3
+          env-slug: dev
+          secret-name: DEMO_SECRET
+
+      - name: Confirm secret was fetched
+        run: |
+          if [ -n "$DEMO_SECRET" ]; then
+            echo "Secret successfully fetched from Infisical"
+          else
+            echo "Secret missing"
+            exit 1
+          fi
